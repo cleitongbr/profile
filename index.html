@@ -1,425 +1,1247 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cleitongbr - Perfil Digital</title>
+    <title>Cleitongbr Status</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js">
+    </script>
+
     <style>
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            --text-main: #ffffff;
-            --text-muted: rgba(255, 255, 255, 0.7);
-            --primary-glow: #8a2be2;
-            --secondary-glow: #00d2ff;
+            --bg-deep: #090909;
+            --bg-base: #101010;
+            --bg-elevated: #151515;
+            --bg-glass: rgba(255, 255, 255, 0.025);
+            --bg-glass-hover: rgba(255, 255, 255, 0.05);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --border-hover: rgba(255, 255, 255, 0.12);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-tertiary: rgba(255, 255, 255, 0.45);
+            --accent-purple: #8B5CF6;
+            --accent-blue: #4F8CFF;
+            --glow-purple: rgba(139, 92, 246, 0.15);
+            --glow-blue: rgba(79, 140, 255, 0.12);
+            --radius-sm: 14px;
+            --radius-md: 18px;
+            --radius-lg: 24px;
+            --radius-xl: 28px;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --transition-fast: 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+            --transition-smooth: 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+            --transition-spring: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        * {
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: var(--bg-deep);
         }
 
         body {
-            background-color: #050505;
-            color: var(--text-main);
+            font-family: var(--font-sans);
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            line-height: 1.6;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             overflow-x: hidden;
-            padding: 2rem 1rem;
             position: relative;
         }
 
-        /* Fundo Dinâmico (Blobs) */
-        .background-blobs {
+        /* ────────────────────────────────────
+           AMBIENT BACKGROUND GLOW ORBS
+           ──────────────────────────────────── */
+        .ambient-glow {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            overflow: hidden;
-            background: radial-gradient(circle at center, #111 0%, #000 100%);
-        }
-
-        .blob {
-            position: absolute;
-            filter: blur(90px);
+            pointer-events: none;
+            z-index: 0;
             border-radius: 50%;
-            opacity: 0.6;
-            animation: float 15s infinite alternate ease-in-out;
+            filter: blur(180px);
+            opacity: 0.35;
+            will-change: transform;
         }
-
-        .blob-1 {
-            width: 400px;
-            height: 400px;
-            background: var(--primary-glow);
-            top: -100px;
-            left: -100px;
-            animation-delay: 0s;
+        .ambient-glow--purple {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, transparent 70%);
+            top: -15%;
+            left: -10%;
+            animation: floatGlow 18s ease-in-out infinite;
         }
-
-        .blob-2 {
+        .ambient-glow--blue {
             width: 500px;
             height: 500px;
-            background: var(--secondary-glow);
-            bottom: -200px;
-            right: -100px;
-            animation-delay: -5s;
+            background: radial-gradient(circle, rgba(79, 140, 255, 0.2) 0%, transparent 70%);
+            bottom: -12%;
+            right: -8%;
+            animation: floatGlow 22s ease-in-out infinite reverse;
         }
-        
-        .blob-3 {
-            width: 300px;
-            height: 300px;
-            background: #ff007a;
+        .ambient-glow--subtle {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 70%);
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            animation-delay: -2s;
-            animation-duration: 20s;
+            animation: floatGlow 25s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-            100% { transform: translate(0, 0) scale(1); }
-        }
-
-        /* Layout Grid */
-        .container {
-            width: 100%;
-            max-width: 1000px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-            z-index: 1;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @media (min-width: 768px) {
-            .container {
-                grid-template-columns: 4fr 5fr;
-                grid-template-rows: auto 1fr;
+        @keyframes floatGlow {
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
             }
-            .card-profile { grid-column: 1; grid-row: 1; }
-            .card-about { grid-column: 1; grid-row: 2; }
-            .card-links { grid-column: 2; grid-row: 1 / span 2; }
+            25% {
+                transform: translate(40px, -30px) scale(1.08);
+            }
+            50% {
+                transform: translate(-20px, 25px) scale(0.94);
+            }
+            75% {
+                transform: translate(-35px, -15px) scale(1.05);
+            }
         }
 
-        @keyframes fadeIn {
+        /* ────────────────────────────────────
+           FLOATING PARTICLES (HERO AREA)
+           ──────────────────────────────────── */
+        .particles-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.35);
+            animation: particleFloat 14s ease-in-out infinite;
+            opacity: 0;
+        }
+        @keyframes particleFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(0) translateX(0) scale(0.6);
+            }
+            10% {
+                opacity: 0.7;
+            }
+            30% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.6;
+                transform: translateY(-50px) translateX(25px) scale(1.1);
+            }
+            70% {
+                opacity: 0.2;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-120px) translateX(-20px) scale(0.4);
+            }
+        }
+
+        /* ────────────────────────────────────
+           STICKY NAVIGATION (GLASS)
+           ──────────────────────────────────── */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+            padding: 0 24px;
+            transition: var(--transition-smooth);
+        }
+        .nav__inner {
+            max-width: 1200px;
+            margin: 16px auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 24px;
+            border-radius: var(--radius-xl);
+            background: rgba(18, 18, 18, 0.65);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid var(--border-subtle);
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+        .nav.scrolled .nav__inner {
+            background: rgba(15, 15, 15, 0.78);
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+        }
+        .nav__logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            text-decoration: none;
+            white-space: nowrap;
+            transition: var(--transition-fast);
+            user-select: none;
+        }
+        .nav__logo:hover {
+            opacity: 0.8;
+        }
+        .nav__links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+        }
+        .nav__link {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 100px;
+            transition: var(--transition-fast);
+            white-space: nowrap;
+            letter-spacing: -0.01em;
+        }
+        .nav__link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .nav__cta {
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 9px 20px;
+            border-radius: 100px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition-smooth);
+            white-space: nowrap;
+            letter-spacing: -0.01em;
+            position: relative;
+            cursor: pointer;
+        }
+        .nav__cta:hover {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: rgba(255, 255, 255, 0.22);
+            box-shadow: 0 0 28px var(--glow-purple), 0 0 8px rgba(139, 92, 246, 0.2);
+        }
+
+        /* Hamburger */
+        .nav__hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 110;
+            background: none;
+            border: none;
+            padding: 8px;
+            border-radius: 10px;
+            transition: var(--transition-fast);
+        }
+        .nav__hamburger:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .nav__hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 10px;
+            transition: var(--transition-smooth);
+            transform-origin: center;
+        }
+        .nav__hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .nav__hamburger.active span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        .nav__hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Mobile menu */
+        .nav__mobile-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 24px;
+            right: 24px;
+            background: rgba(18, 18, 18, 0.9);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 16px 8px;
+            flex-direction: column;
+            gap: 4px;
+            z-index: 105;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+            transition: var(--transition-smooth);
+        }
+        .nav__mobile-menu.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .nav__mobile-menu .nav__link {
+            display: block;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: var(--radius-sm);
+        }
+        .nav__mobile-menu .nav__cta {
+            display: block;
+            text-align: center;
+            margin: 8px 12px;
+            padding: 12px 20px;
+            font-size: 0.9rem;
+        }
+
+        /* ────────────────────────────────────
+           MAIN CONTENT WRAPPER
+           ──────────────────────────────────── */
+        .main {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ────────────────────────────────────
+           SECTION SPACING
+           ──────────────────────────────────── */
+        .section {
+            padding: 100px 24px;
+            position: relative;
+            z-index: 1;
+        }
+        .section--hero {
+            padding-top: 60px;
+            padding-bottom: 120px;
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+        }
+        .section--about {
+            padding-top: 60px;
+            padding-bottom: 100px;
+        }
+        .section--socials {
+            padding-top: 60px;
+            padding-bottom: 100px;
+        }
+        .section--download {
+            padding-top: 60px;
+            padding-bottom: 100px;
+        }
+        .section__inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .section__label {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            margin-bottom: 16px;
+        }
+        .section__title {
+            font-size: clamp(2rem, 4.5vw, 3.2rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            line-height: 1.15;
+        }
+        .section__text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.7;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+
+        /* ────────────────────────────────────
+           HERO SECTION
+           ──────────────────────────────────── */
+        .hero {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        .hero__badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 100px;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-subtle);
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            letter-spacing: -0.01em;
+            animation: fadeInUp 0.7s var(--transition-smooth) both;
+        }
+        .hero__badge-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #4ade80;
+            box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+            animation: pulseDot 2s ease-in-out infinite;
+        }
+        @keyframes pulseDot {
+            0%,
+            100% {
+                box-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 18px rgba(74, 222, 128, 0.75);
+            }
+        }
+        .hero__title {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            animation: fadeInUp 0.7s var(--transition-smooth) 0.1s both;
+        }
+        .hero__subtitle {
+            font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+            font-weight: 500;
+            color: var(--text-secondary);
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+            animation: fadeInUp 0.7s var(--transition-smooth) 0.2s both;
+        }
+        .hero__description {
+            font-size: 1rem;
+            color: var(--text-tertiary);
+            max-width: 480px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+            animation: fadeInUp 0.7s var(--transition-smooth) 0.3s both;
+        }
+        .hero__actions {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.7s var(--transition-smooth) 0.4s both;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        /* Glassmorphism Cards */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border: 1px solid var(--glass-border);
-            border-radius: 28px;
-            padding: 2rem;
-            box-shadow: var(--glass-shadow);
+        /* ────────────────────────────────────
+           BUTTONS
+           ──────────────────────────────────── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 26px;
+            border-radius: 100px;
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: -0.01em;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            border: none;
+            white-space: nowrap;
             position: relative;
             overflow: hidden;
-            transition: border-color 0.3s ease, background 0.3s ease;
-            transform-style: preserve-3d;
+        }
+        .btn--primary {
+            background: #ffffff;
+            color: #0a0a0a;
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+        }
+        .btn--primary:hover {
+            box-shadow: 0 8px 35px rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        .btn--secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .btn--secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.22);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 25px rgba(255, 255, 255, 0.06);
+        }
+        .btn--glass {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .btn--glass:hover {
+            background: var(--bg-glass-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+        .btn--sm {
+            padding: 9px 18px;
+            font-size: 0.82rem;
+        }
+        .btn i,
+        .btn svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
         }
 
+        /* ────────────────────────────────────
+           GLASS CARDS
+           ──────────────────────────────────── */
+        .glass-card {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 28px 26px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            cursor: default;
+        }
         .glass-card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            inset: 0;
             border-radius: inherit;
+            background: linear-gradient(135deg,
+                    rgba(255, 255, 255, 0.04) 0%,
+                    transparent 40%,
+                    transparent 70%,
+                    rgba(255, 255, 255, 0.02) 100%);
             pointer-events: none;
             z-index: 1;
+            transition: var(--transition-smooth);
+            opacity: 0;
         }
-
-        .glass-card-content {
-            position: relative;
-            z-index: 2;
-            transform: translateZ(30px); /* 3D effect depth */
+        .glass-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--border-hover);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), 0 0 40px var(--glow-purple);
+            background: rgba(255, 255, 255, 0.04);
         }
-
-        /* Card Profile */
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
+        .glass-card:hover::before {
+            opacity: 1;
         }
-
-        .avatar-container {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #fff, #aaa);
-            padding: 3px;
-            box-shadow: 0 0 20px rgba(255,255,255,0.2);
-        }
-
-        .avatar {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background-color: #222;
-            background-image: url('https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/ab2aa54cca262353cbcd5e6f6a7640c5~tplv-tiktokx-cropcenter:1080:1080.jpeg?dr=14579&refresh_token=b0732755&x-expires=1772431200&x-signature=XYVasrcnqsur%2BHtaG9XvKvnx4qM%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=my');
-            background-size: cover;
-            background-position: center;
-        }
-
-        h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            background: linear-gradient(to right, #fff, #bbb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Card About */
-        .card-about h2 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.85rem;
-        }
-
-        .card-about p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        .card-about .gemini-credit {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            font-style: italic;
-        }
-
-        /* Card Links */
-        .links-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            height: 100%;
-        }
-
-        .link-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1.2rem 1.5rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            text-decoration: none;
-            color: var(--text-main);
-            font-weight: 500;
-            font-size: 1.1rem;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .link-item::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .link-item:hover {
-            transform: translateY(-3px) scale(1.02);
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-
-        .link-item:hover::before {
-            left: 100%;
-        }
-
-        .link-icon {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
+        .glass-card__icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.3s ease;
+            margin-bottom: 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            position: relative;
+            z-index: 2;
+            transition: var(--transition-smooth);
+        }
+        .glass-card:hover .glass-card__icon {
+            background: rgba(255, 255, 255, 0.09);
+            box-shadow: 0 0 22px var(--glow-purple);
+        }
+        .glass-card__icon svg {
+            width: 22px;
+            height: 22px;
+            color: var(--text-primary);
+            transition: var(--transition-fast);
+        }
+        .glass-card__title {
+            font-weight: 600;
+            font-size: 1.05rem;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+            position: relative;
+            z-index: 2;
+        }
+        .glass-card__desc {
+            font-size: 0.88rem;
+            color: var(--text-tertiary);
+            line-height: 1.5;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 2;
+        }
+        .glass-card__action {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 100px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: var(--transition-fast);
+            position: relative;
+            z-index: 2;
+            cursor: pointer;
+            letter-spacing: -0.01em;
+        }
+        .glass-card__action:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.18);
+        }
+        .glass-card__action svg {
+            width: 15px;
+            height: 15px;
+            transition: var(--transition-fast);
+        }
+        .glass-card__action:hover svg {
+            transform: translateX(2px) translateY(-2px);
         }
 
-        .link-item:hover .link-icon {
-            transform: scale(1.2);
+        /* ────────────────────────────────────
+           SOCIALS GRID
+           ──────────────────────────────────── */
+        .socials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 18px;
         }
 
-        /* Cores de Hover Específicas */
-        .link-item.youtube:hover { box-shadow: 0 0 20px rgba(255, 0, 0, 0.3); border-color: #ff0000; }
-        .link-item.tiktok:hover { box-shadow: 0 0 20px rgba(0, 242, 254, 0.3); border-color: #00f2fe; }
-        .link-item.telegram:hover { box-shadow: 0 0 20px rgba(0, 136, 204, 0.3); border-color: #0088cc; }
-        .link-item.instagram:hover { box-shadow: 0 0 20px rgba(225, 48, 108, 0.3); border-color: #e1306c; }
-        .link-item.discord:hover { box-shadow: 0 0 20px rgba(88, 101, 242, 0.3); border-color: #5865F2; }
-        .link-item.github:hover { box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); border-color: #ffffff; }
-        .link-item.roblox:hover { box-shadow: 0 0 20px rgba(200, 200, 200, 0.3); border-color: #aaaaaa; }
-        .link-item.reddit:hover { box-shadow: 0 0 20px rgba(255, 69, 0, 0.3); border-color: #ff4500; }
-        .link-item.pixgg:hover { box-shadow: 0 0 20px rgba(0, 255, 136, 0.3); border-color: #00ff88; }
+        /* ────────────────────────────────────
+           DOWNLOAD GRID
+           ──────────────────────────────────── */
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            max-width: 750px;
+        }
+        .download-card {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 30px 28px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+        .download-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(135deg,
+                    rgba(255, 255, 255, 0.03) 0%,
+                    transparent 40%,
+                    transparent 70%,
+                    rgba(255, 255, 255, 0.01) 100%);
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+            transition: var(--transition-smooth);
+        }
+        .download-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-hover);
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.3), 0 0 30px var(--glow-blue);
+            background: rgba(255, 255, 255, 0.035);
+        }
+        .download-card:hover::before {
+            opacity: 1;
+        }
+        .download-card__name {
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: -0.02em;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+            position: relative;
+            z-index: 2;
+        }
+        .download-card__meta {
+            display: flex;
+            gap: 16px;
+            font-size: 0.82rem;
+            color: var(--text-tertiary);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+            letter-spacing: -0.01em;
+        }
+        .download-card__meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .download-card .btn {
+            position: relative;
+            z-index: 2;
+        }
 
-        /* Scrollbar suave */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
+        /* ────────────────────────────────────
+           FOOTER
+           ──────────────────────────────────── */
+        .footer {
+            padding: 40px 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 1;
+        }
+        .footer__inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .footer__copy {
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+            letter-spacing: -0.01em;
+        }
+        .footer__links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+        .footer__links a {
+            text-decoration: none;
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: var(--transition-fast);
+            letter-spacing: -0.01em;
+        }
+        .footer__links a:hover {
+            color: var(--text-primary);
+        }
 
+        /* ────────────────────────────────────
+           REVEAL ON SCROLL
+           ──────────────────────────────────── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.7s cubic-bezier(0.25, 0.1, 0.25, 1),
+                transform 0.7s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+        .reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ────────────────────────────────────
+           RESPONSIVE
+           ──────────────────────────────────── */
+        @media (max-width: 768px) {
+            .nav__links {
+                display: none;
+            }
+            .nav__cta-desktop {
+                display: none;
+            }
+            .nav__hamburger {
+                display: flex;
+            }
+            .nav__mobile-menu {
+                display: flex;
+            }
+            .section {
+                padding: 60px 16px;
+            }
+            .section--hero {
+                padding-top: 40px;
+                padding-bottom: 80px;
+                min-height: 75vh;
+            }
+            .hero__title {
+                font-size: clamp(2.2rem, 10vw, 3.5rem);
+            }
+            .hero__actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            .hero__actions .btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+            .socials-grid {
+                grid-template-columns: 1fr;
+            }
+            .download-grid {
+                grid-template-columns: 1fr;
+                max-width: 100%;
+            }
+            .footer__inner {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer__links {
+                justify-content: center;
+            }
+            .glass-card {
+                padding: 22px 20px;
+            }
+            .nav__inner {
+                padding: 12px 18px;
+                margin: 10px auto;
+                border-radius: var(--radius-lg);
+            }
+            .nav__mobile-menu {
+                left: 16px;
+                right: 16px;
+                border-radius: var(--radius-md);
+            }
+        }
+        @media (min-width: 769px) {
+            .nav__mobile-menu {
+                display: none !important;
+            }
+            .nav__hamburger {
+                display: none;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero__title {
+                font-size: 2rem;
+            }
+            .hero__subtitle {
+                font-size: 0.95rem;
+            }
+            .hero__description {
+                font-size: 0.85rem;
+            }
+            .section__title {
+                font-size: 1.6rem;
+            }
+            .glass-card {
+                padding: 18px 16px;
+                border-radius: var(--radius-md);
+            }
+            .download-card {
+                padding: 22px 18px;
+                border-radius: var(--radius-md);
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Fundo Dinâmico -->
-    <div class="background-blobs">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-    </div>
+    <!-- ────────────────────────────────
+    AMBIENT BACKGROUND GLOW ORBS
+    ──────────────────────────────── -->
+    <div class="ambient-glow ambient-glow--purple" aria-hidden="true"></div>
+    <div class="ambient-glow ambient-glow--blue" aria-hidden="true"></div>
+    <div class="ambient-glow ambient-glow--subtle" aria-hidden="true"></div>
 
-    <!-- Container Principal -->
-    <div class="container">
-        
-        <!-- Topo Esquerda: Perfil -->
-        <div class="glass-card card-profile tilt-card">
-            <div class="glass-card-content profile-header">
-                <div class="avatar-container">
-                    <div class="avatar"></div>
-                </div>
-                <div>
-                    <h1>Cleitongbr</h1>
-                </div>
-            </div>
+    <!-- ────────────────────────────────
+    STICKY NAVIGATION
+    ──────────────────────────────── -->
+    <nav class="nav" id="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav__inner">
+            <!-- Logo -->
+            <a href="#" class="nav__logo" aria-label="Cleitongbr Home">Cleitongbr</a>
+
+            <!-- Desktop Links -->
+            <ul class="nav__links" id="navLinks">
+                <li><a href="#home" class="nav__link">Home</a></li>
+                <li><a href="#about" class="nav__link">About</a></li>
+                <li><a href="#socials" class="nav__link">Socials</a></li>
+                <!--<li><a href="#download" class="nav__link">Download</a></li>-->
+            </ul>
+
+            <!-- Desktop CTA -->
+            <a href="#socials" class="nav__cta nav__cta-desktop">Contact</a>
+
+            <!-- Hamburger (Mobile) -->
+            <button class="nav__hamburger" id="hamburgerBtn" aria-label="Toggle menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
 
-        <!-- Base Esquerda: Sobre -->
-        <div class="glass-card card-about tilt-card">
-            <div class="glass-card-content">
-                <h2>Sobre Mim</h2>
-                <p>todos meu socias e jogos internet! me segue quisese! :P</p>
-                
-                <div class="gemini-credit">
-                    Criado por sua Gemini. Para falar ou saber mais sobre mim, fique à vontade!
+        <!-- Mobile Menu -->
+        <div class="nav__mobile-menu" id="mobileMenu">
+            <a href="#home" class="nav__link">Home</a>
+            <a href="#about" class="nav__link">About</a>
+            <a href="#socials" class="nav__link">Socials</a>
+            <!--<a href="#download" class="nav__link">Download</a> -->
+            <a href="#socials" class="nav__cta">Contact</a>
+        </div>
+    </nav>
+
+    <!-- ────────────────────────────────
+    MAIN CONTENT
+    ──────────────────────────────── -->
+    <main class="main">
+
+        <!-- ─── HERO SECTION ─── -->
+        <section class="section section--hero" id="home">
+            <div class="particles-container" id="particlesContainer" aria-hidden="true"></div>
+            <div class="section__inner hero">
+                <div class="hero__badge">
+                    <span class="hero__badge-dot" aria-hidden="true"></span>
+                    Available for projects
+                </div>
+                <h1 class="hero__title">Cleitongbr</h1>
+                <p class="hero__subtitle">Developer From IA &bull; Creator &bull; iQ 0.67</p>
+                <p class="hero__description">
+                    No title.
+                </p>
+                <div class="hero__actions">
+                    <a href="#socials" class="btn btn--primary">
+                        View Socials
+                        <i data-lucide="arrow-right" style="width:18px;height:18px;"></i>
+                    </a>
+                    <!--<a href="#download" class="btn btn--secondary">
+                        Download
+                        <i data-lucide="download" style="width:18px;height:18px;"></i>
+                    </a>-->
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Direita: Links -->
-        <div class="glass-card card-links tilt-card">
-            <div class="glass-card-content links-list">
-                
-                <a href="https://www.youtube.com/@cleitongbr" class="link-item youtube">
-                    <svg class="link-icon" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                    <span>YouTube</span>
-                </a>
-
-                <a href="https://www.tiktok.com/@cleitongbr" class="link-item tiktok">
-                    <svg class="link-icon" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.12-3.44-3.17-3.8-5.46-.4-2.46.36-5.04 2.05-6.83 1.58-1.68 4.02-2.5 6.31-2.07v4.13c-1.1-.11-2.26.17-3.12.87-.77.62-1.25 1.56-1.31 2.56-.06 1.16.48 2.34 1.39 3.06.94.75 2.27.97 3.42.59 1.56-.5 2.59-2.08 2.6-3.73.04-5.26.02-10.51.02-15.77z"/></svg>
-                    <span>TikTok</span>
-                </a>
-
-                <a href="https://t.me/Cleitongbr" class="link-item telegram">
-                    <svg class="link-icon" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-                    <span>Telegram</span>
-                </a>
-
-                <a href="https://www.instagram.com/cleitongbr/" class="link-item instagram">
-                    <svg class="link-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                    <span>Instagram</span>
-                </a>
-
-                <a href="http://discord.com/users/471326173394370571" class="link-item discord">
-                    <svg class="link-icon" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg>
-                    <span>Discord</span>
-                </a>
-
-                <a href="https://github.com/cleitongbr" class="link-item github">
-                    <svg class="link-icon" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                    <span>GitHub</span>
-                </a>
-
-                <a href="https://www.roblox.com/pt/users/4177549347/profile" class="link-item roblox">
-                    <svg class="link-icon" viewBox="0 0 24 24"><path d="M5.385 0L0 20.248l18.615 3.752L24 3.752 5.385 0zm6.918 14.801l-2.905-.586.586-2.905 2.905.586-.586 2.905z"/></svg>
-                    <span>Roblox</span>
-                </a>
-
-                <a href="https://www.reddit.com/user/cleitongbr/" class="link-item reddit">
-                    <svg class="link-icon" viewBox="0 0 24 24"><path d="M24 11.5c0-1.65-1.35-3-3-3-.96 0-1.86.48-2.42 1.24-1.64-1-3.75-1.64-6.07-1.72.08-1.1.4-3.05 1.52-3.7.72-.4 1.73-.24 3 .5C17.2 6.3 18.46 7.5 20 7.5c1.65 0 3-1.35 3-3s-1.35-3-3-3c-1.38 0-2.54.94-2.88 2.22-1.43-.72-2.64-.8-3.6-.25-1.64.94-1.95 3.47-2 4.55-2.33.08-4.45.7-6.1 1.72C4.86 8.98 3.96 8.5 3 8.5c-1.65 0-3 1.35-3 3 0 1.32.84 2.44 2.05 2.84-.03.22-.05.44-.05.66 0 3.86 4.5 7 10 7s10-3.14 10-7c0-.22-.02-.44-.05-.66 1.2-.4 2.05-1.54 2.05-2.84zM2.3 13.37C1.5 13.07 1 12.35 1 11.5c0-1.1.9-2 2-2 .64 0 1.22.32 1.6.82-1.1.85-1.92 1.9-2.3 3.05zm3.7.13c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9.8 4.8c-1.08.63-2.42.96-3.8.96-1.4 0-2.74-.34-3.8-.95-.24-.13-.32-.44-.2-.68.15-.24.46-.32.7-.18 1.83 1.06 4.76 1.06 6.6 0 .23-.13.53-.05.67.2.14.23.06.54-.18.67zm.2-2.8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm5.7-2.13c-.38-1.16-1.2-2.2-2.3-3.05.38-.5.97-.82 1.6-.82 1.1 0 2 .9 2 2 0 .84-.53 1.57-1.3 1.87z"/></svg>
-                    <span>raddit</span>
-                </a>
-
-                <a href="https://pixgg.com/cleitongbr" class="link-item pixgg">
-                    <svg class="link-icon" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-                    <span>Pixgg</span>
-                </a>
-
+        <!-- ─── ABOUT SECTION ─── -->
+        <section class="section section--about" id="about">
+            <div class="section__inner">
+                <span class="section__label reveal">About</span>
+                <h2 class="section__title reveal">About</h2>
+                <div class="glass-card reveal" style="max-width:620px;">
+                    <p style="font-size:1.05rem;color:var(--text-secondary);line-height:1.75;position:relative;z-index:2;letter-spacing:-0.01em;">
+                        Passionate developer creating modern interfaces, tools and experimental projects focused on
+                        simplicity, performance and clean design.
+                    </p>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <!-- Script para Efeito 3D (Tilt) Premium -->
+        <!-- ─── SOCIALS SECTION ─── -->
+        <section class="section section--socials" id="socials">
+            <div class="section__inner">
+                <span class="section__label reveal">Connect</span>
+                <h2 class="section__title reveal">Socials</h2>
+                <div class="socials-grid">
+                    <!-- YouTube -->
+                    <div class="glass-card reveal">
+                        <div class="glass-card__icon"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>YouTube</title><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div>
+                        <h3 class="glass-card__title">YouTube</h3>
+                        <p class="glass-card__desc">Nothings vids.</p>
+                        <a href="www.youtube.com/@cleitongbr" class="glass-card__action">Open <i data-lucide="arrow-up-right"></i></a>
+                    </div>
+                    <!-- Instagram -->
+                    <div class="glass-card reveal">
+                        <div class="glass-card__icon"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Instagram</title><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></div>
+                        <h3 class="glass-card__title">Instagram</h3>
+                        <p class="glass-card__desc">No profile, no Reels, nothing.</p>
+                        <a href="www.instagram.com/cleitongbr" class="glass-card__action">Open <i data-lucide="arrow-up-right"></i></a>
+                    </div>
+                    <!-- GitHub -->
+                    <div class="glass-card reveal">
+                        <div class="glass-card__icon"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></div>
+                        <h3 class="glass-card__title">GitHub</h3>
+                        <p class="glass-card__desc">just free website lol.</p>
+                        <a href="https://github.com/cleitongbr" class="glass-card__action">Open <i data-lucide="arrow-up-right"></i></a>
+                    </div>
+                    <!-- Discord Server -->
+                    <div class="glass-card reveal">
+                        <div class="glass-card__icon"><i data-lucide="message-circle"></i></div>
+                        <h3 class="glass-card__title">Discord Server</h3>
+                        <p class="glass-card__desc">Join the community</p>
+                        <a href="#" class="glass-card__action">Open <i data-lucide="arrow-up-right"></i></a>
+                    </div>
+                    <!-- Telegram -->
+                    <div class="glass-card reveal">
+                        <div class="glass-card__icon"><i data-lucide="send"></i></div>
+                        <h3 class="glass-card__title">Telegram</h3>
+                        <p class="glass-card__desc">I'm quiting</p>
+                        <a href="t.me/Cleitongbr" class="glass-card__action">Open <i data-lucide="arrow-up-right"></i></a>
+                    </div>
+                    <!-- Roblox Profile -->
+                    <div class="glass-card reveal">
+                        <div class="glass-card__icon"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Roblox</title><path d="M18.926 23.998 0 18.892 5.075.002 24 5.108ZM15.348 10.09l-5.282-1.453-1.414 5.273 5.282 1.453z"/></svg></div>
+                        <h3 class="glass-card__title">Roblox Profile</h3>
+                        <p class="glass-card__desc">Check out my games, creations, and Roblox activity.</p>
+                        <a href="www.roblox.com/pt/users/4177549347/profile" class="glass-card__action">Open <i data-lucide="arrow-up-right"></i></a>
+                    </div>
+                    <!-- Roblox Group -->
+                    <div class="glass-card reveal">
+                        <div class="glass-card__icon"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Roblox</title><path d="M18.926 23.998 0 18.892 5.075.002 24 5.108ZM15.348 10.09l-5.282-1.453-1.414 5.273 5.282 1.453z"/></svg></div>
+                        <h3 class="glass-card__title">Roblox Group</h3>
+                        <p class="glass-card__desc">Join the group for exclusive content and events.</p>
+                        <a href="www.roblox.com/pt/communities/316494174/ByCleit#!/about" class="glass-card__action">Open <i data-lucide="arrow-up-right"></i></a>
+                    </div>
+                    <!-- TikTok -->
+                    <div class="glass-card reveal">
+                        <div class="glass-card__icon"><i data-lucide="music"></i></div>
+                        <h3 class="glass-card__title">TikTok</h3>
+                        <p class="glass-card__desc">Follow me! ty</p>
+                        <a href="www.tiktok.com/@cleitgbr" class="glass-card__action">Open <i data-lucide="arrow-up-right"></i></a>
+                    </div>
+                    <!-- Reddit -->
+                    <div class="glass-card reveal">
+                        <div class="glass-card__icon"><i data-lucide="message-square"></i></div>
+                        <h3 class="glass-card__title">Reddit</h3>
+                        <p class="glass-card__desc">Just nothing.</p>
+                        <a href="www.reddit.com/user/cleitongbr/" class="glass-card__action">Open <i data-lucide="arrow-up-right"></i></a>
+                    </div>
+                    <!-- Twitter -->
+                    <div class="glass-card reveal">
+                        <div class="glass-card__icon"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>X</title><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg></div>
+                        <h3 class="glass-card__title">Twitter(X)</h3>
+                        <p class="glass-card__desc">Dont talk me.</p>
+                        <a href="x.com/cleitongbr_" class="glass-card__action">Open <i data-lucide="arrow-up-right"></i></a>
+                    </div>
+                    <!-- Donate (Pix) -->
+                    <div class="glass-card reveal">
+                        <div class="glass-card__icon"><i data-lucide="heart"></i></div>
+                        <h3 class="glass-card__title">Donate (Pix)</h3>
+                        <p class="glass-card__desc">Support my work with a direct contribution via Pix.</p>
+                        <a href="pixgg.com/cleitongbr" class="glass-card__action">Open <i data-lucide="arrow-up-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ────────────────────────────────
+    FOOTER
+    ──────────────────────────────── -->
+    <footer class="footer">
+        <div class="footer__inner">
+            <p class="footer__copy">Copyright &copy; 2026 Cleitongbr</p>
+            <ul class="footer__links">
+                <li><a href="#">GitHub</a></li>
+                <li><a href="#">Discord</a></li>
+                <li><a href="#">Telegram</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <!-- ────────────────────────────────
+    SCRIPTS
+    ──────────────────────────────── -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const cards = document.querySelectorAll('.tilt-card');
+        (function() {
+            // ── Initialize Lucide Icons ─────────────────
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
 
-            // Verifica se é mobile (se for touch, o efeito 3D pode ser suavizado ou ignorado para performance)
-            const isTouchDevice = () => 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            // ── DOM References ──────────────────────────
+            const navbar = document.getElementById('navbar');
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const particlesContainer = document.getElementById('particlesContainer');
+            const revealElements = document.querySelectorAll('.reveal');
 
-            if (!isTouchDevice()) {
-                cards.forEach(card => {
-                    const content = card.querySelector('.glass-card-content');
-                    
-                    card.addEventListener('mousemove', e => {
-                        const rect = card.getBoundingClientRect();
-                        const x = e.clientX - rect.left;
-                        const y = e.clientY - rect.top;
-                        
-                        const centerX = rect.width / 2;
-                        const centerY = rect.height / 2;
-                        
-                        // Fator de rotação - quanto menor o divisor, mais forte o efeito
-                        const rotateX = ((y - centerY) / centerY) * -5;
-                        const rotateY = ((x - centerX) / centerX) * 5;
-                        
-                        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-                        
-                        // Movimento oposto suave do conteúdo interno para efeito parallax
-                        if(content) {
-                            content.style.transform = `translateZ(40px) translateX(${rotateY * -0.5}px) translateY(${rotateX * 0.5}px)`;
+            // ── Navigation Scroll Effect ────────────────
+            function updateNavScroll() {
+                if (window.scrollY > 20) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            }
+            window.addEventListener('scroll', updateNavScroll, { passive: true });
+            updateNavScroll(); // Initial check
+
+            // ── Hamburger Menu Toggle ──────────────────
+            function closeMobileMenu() {
+                hamburgerBtn.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                hamburgerBtn.setAttribute('aria-expanded', 'false');
+            }
+
+            function openMobileMenu() {
+                hamburgerBtn.classList.add('active');
+                mobileMenu.classList.add('active');
+                hamburgerBtn.setAttribute('aria-expanded', 'true');
+            }
+
+            hamburgerBtn.addEventListener('click', () => {
+                if (mobileMenu.classList.contains('active')) {
+                    closeMobileMenu();
+                } else {
+                    openMobileMenu();
+                }
+            });
+
+            // Close mobile menu when a link is clicked
+            const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    closeMobileMenu();
+                });
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (
+                    mobileMenu.classList.contains('active') &&
+                    !mobileMenu.contains(e.target) &&
+                    !hamburgerBtn.contains(e.target)
+                ) {
+                    closeMobileMenu();
+                }
+            });
+
+            // Close mobile menu on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                    closeMobileMenu();
+                    hamburgerBtn.focus();
+                }
+            });
+
+            // ── Floating Particles ──────────────────────
+            function createParticles() {
+                if (!particlesContainer) return;
+                const count = 16;
+                const fragment = document.createDocumentFragment();
+
+                for (let i = 0; i < count; i++) {
+                    const particle = document.createElement('span');
+                    particle.classList.add('particle');
+                    const size = Math.random() * 3 + 2; // 2-5px
+                    particle.style.width = size + 'px';
+                    particle.style.height = size + 'px';
+                    particle.style.left = Math.random() * 92 + '%';
+                    particle.style.top = Math.random() * 85 + '%';
+                    particle.style.animationDuration = (Math.random() * 16 + 10) + 's';
+                    particle.style.animationDelay = (Math.random() * 10) + 's';
+                    particle.style.opacity = (Math.random() * 0.4 + 0.15);
+                    fragment.appendChild(particle);
+                }
+                particlesContainer.appendChild(fragment);
+            }
+            createParticles();
+
+            // ── Intersection Observer (Reveal on Scroll) ─
+            if ('IntersectionObserver' in window) {
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '0px 0px -40px 0px',
+                    threshold: 0.12,
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('revealed');
+                            observer.unobserve(entry.target);
                         }
                     });
+                }, observerOptions);
 
-                    card.addEventListener('mouseleave', () => {
-                        card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
-                        if(content) {
-                            content.style.transform = `translateZ(30px) translateX(0) translateY(0)`;
+                revealElements.forEach(el => {
+                    observer.observe(el);
+                });
+
+                // Also observe any dynamically added reveal elements
+                const mutationObserver = new MutationObserver(() => {
+                    document.querySelectorAll('.reveal:not(.revealed)').forEach(el => {
+                        if (!el.dataset.observed) {
+                            el.dataset.observed = 'true';
+                            observer.observe(el);
                         }
                     });
                 });
+                mutationObserver.observe(document.body, { childList: true, subtree: true });
+            } else {
+                // Fallback: show all elements immediately
+                revealElements.forEach(el => el.classList.add('revealed'));
             }
-        });
+
+            // ── Smooth Scroll for Nav Links (fallback for older browsers) ─
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    const target = document.querySelector(targetId);
+                    if (target) {
+                        e.preventDefault();
+                        const navHeight = navbar.offsetHeight + 20;
+                        const targetPosition = target.getBoundingClientRect().top + window
+                            .pageYOffset - navHeight;
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth',
+                        });
+                    }
+                });
+            });
+
+            // ── Log for verification ────────────────────
+            console.log('%c Cleitongbr %c Landing Page Ready ',
+                'background:#8B5CF6;color:#fff;padding:6px 12px;border-radius:100px 0 0 100px;font-weight:700;',
+                'background:#151515;color:#fff;padding:6px 12px;border-radius:0 100px 100px 0;');
+            console.log('%c Premium Dark UI • Glassmorphism • All systems nominal',
+                'color:rgba(255,255,255,0.5);font-style:italic;');
+        })();
     </script>
 </body>
 </html>
